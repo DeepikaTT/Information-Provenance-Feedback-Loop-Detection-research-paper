@@ -10,6 +10,7 @@ import os
 import json
 from datetime import datetime
 from google import genai
+from google.genai import types
 
 from metrics import (
     gds,
@@ -29,7 +30,9 @@ from metrics import (
 # This line reads it automatically — no key is ever written in this file:
 client = genai.Client(api_key=os.environ.get("AQ.Ab8RN6LkJMOt6x50EgXGDvDTO4KjOhKG3oLeZ3sSjDzD2-_dGw"))
 
-MODEL = "gemini-2.5-flash"
+MODEL = "gemini-3.6-flash"
+TEMPERATURE = 1.3   # 0.0 = deterministic/robotic, 2.0 = max randomness
+                     # 1.2–1.4 gives noticeably more drift per generation
 
 
 def generate_next_generation(previous_text: str) -> str:
@@ -41,11 +44,17 @@ def generate_next_generation(previous_text: str) -> str:
     response = client.models.generate_content(
         model=MODEL,
         contents=(
-            "Paraphrase the following text in your own words, "
-            "as if retelling it to someone from memory. "
-            "Keep it roughly the same length or slightly shorter. "
-            "Do not add commentary, just output the paraphrased text.\n\n"
+            "You just heard the following story once, and now you're "
+            "retelling it to a friend from memory a few days later. "
+            "You don't remember all the exact details anymore. "
+            "Retell it in your own words, roughly half the length, "
+            "focusing only on what you'd realistically still remember. "
+            "It's okay to lose specific details, names, or numbers if a "
+            "real person would likely forget them.\n\n"
             f"{previous_text}"
+        ),
+        config=types.GenerateContentConfig(
+            temperature=TEMPERATURE,
         ),
     )
     return response.text.strip()
