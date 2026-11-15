@@ -1,3 +1,13 @@
+## Research Status
+
+**Status: Preliminary experimental research (ongoing).**
+
+This repository currently documents initial experiments on information drift across repeated LLM-generated rewrites, including generational drift measurements, experimental logs, and visualizations.
+
+Source-grounded atomic-claim tracking, claim-survival analysis, and provenance-depth estimation are proposed research extensions that have not yet been validated.
+
+The novelty of the proposed methodology and its relationship to existing research remain under investigation.
+
 # Information Half-Life
 ### Measuring Claim-Level Degradation in Recursive AI Content Transformation
 
